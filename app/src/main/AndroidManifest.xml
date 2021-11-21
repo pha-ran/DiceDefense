@@ -10,7 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiceDefense">
         <activity
-            android:name=".MainActivity"
+            android:name=".Game.GameActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
