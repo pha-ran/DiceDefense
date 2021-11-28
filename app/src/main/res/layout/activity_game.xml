@@ -8,6 +8,7 @@
     tools:context=".Game.GameActivity">
 
     <com.dicedefense.Game.GameView
+        android:id="@+id/gameView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2" />
@@ -30,25 +31,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
         </LinearLayout>
 
@@ -63,25 +64,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
         </LinearLayout>
 
@@ -96,25 +97,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:srcCompat="@drawable/dice" />
+                app:srcCompat="@drawable/dice_empty" />
 
         </LinearLayout>
 
