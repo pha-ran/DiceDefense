@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiceDefense">
         <activity
+            android:name=".Main.ScoreActivity"
+            android:exported="true" />
+        <activity
             android:name=".Game.GameActivity"
             android:exported="true" />
         <activity
