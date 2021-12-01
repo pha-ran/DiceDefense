@@ -87,14 +87,14 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             time = 1
         } else {
             if (time == 48) { // 초당 약 1회 동작
-                enemyList.add(Enemy(50f, 0f, 50)) // 적 객체 생성
+                enemyList.add(Enemy(50f, 0f, 30)) // 적 객체 생성
             }
 
             if (time / 4 > 0 && time % 4 == 0) {
                 val dice = diceList[(time / 4) - 1]
 
                 if (dice.level > 0 && dice.isWait) { // 공격 대기 상태일 경우 공격 시작
-                    val r = random.nextInt(49) - 25
+                    val r = random.nextInt(50) - 25
                     dice.attackX = mid + r  // x 좌표 랜덤 설정
                     dice.attackY = bot
                     dice.isWait = false
@@ -117,7 +117,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                     paintRed
                 )
 
-                dice.attackY -= 40
+                dice.attackY -= 5
             }
         }
 
@@ -168,11 +168,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private fun addRandom() {
         if (!isFull()) {
             while (true) {
-                val r = random.nextInt(11)
+                val r = random.nextInt(12)
                 if (diceList[r].level == 0) {
                     diceList[r].level = 1
+                    gameActivity.drawDice()
+                    break
                 }
-                return
             }
         }
     }
@@ -188,5 +189,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     fun getScore() : Int {
         return score // GameActivity 에서 score 사용
+    }
+
+    fun getDiceList() : ArrayList<Dice> {
+        return diceList
     }
 }
