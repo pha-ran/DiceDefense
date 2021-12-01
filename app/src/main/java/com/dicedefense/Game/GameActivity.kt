@@ -13,11 +13,21 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.button.setOnClickListener {
+            binding.gameView.buyDice() // 구매 버튼 클릭
+        }
     }
 
     // 뒤로가기 키 방지
     override fun onBackPressed() {
         //super.onBackPressed()
+    }
+
+    fun drawDice(diceList : ArrayList<Dice>) {
+        for (dice in diceList) {
+            // ToDo
+        }
     }
 
     fun gameOver() {

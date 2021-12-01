@@ -18,6 +18,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private val paintBlue = Paint()
     private val paintRed = Paint()
     private val random = Random()
+    private val diceList = ArrayList<Dice>()
     private val enemyList = ArrayList<Enemy>()
 
     // Var
@@ -29,6 +30,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var playerHp = 100
     private var score = 0
     private var gold = 50
+    private var price = 10
     private var time = 0
 
     // Initialize
@@ -46,8 +48,11 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         paintGray.color = Color.GRAY
         paintBlue.color = Color.BLUE
         paintRed.color = Color.RED
+        // Dice List 초기화 (3 * 4 = 12개)
+        for (i in 0..11)  {diceList.add(Dice(0, 0, mid, bot, true))}
     }
 
+    // Game Loop
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
@@ -56,19 +61,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
         else {
             initialDraw(canvas)
-
-            time += 1
-            if (time >= 50) { // 초당 1회 동작
-                enemyList.add(Enemy(50f, 0f, 100)) // 적 객체 생성
-                time = 0
-            }
-
-            enemyDraw(canvas)
-            
+            statusChanged(canvas)
             invalidate()
         }
     }
 
+    // Initial Draw
     private fun initialDraw(canvas: Canvas) {
         // 기본 도형 그리기
         canvas.drawRect(mid - 5, top, mid + 5, bot, paintGray)
@@ -79,9 +77,50 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawText("score : $score", x/16f, y/16f, paintBlack)
         canvas.drawText("HP : $playerHp", x/16f, 15*y/16f, paintBlack)
         canvas.drawText("gold : $gold", 10*x/16f, 15*y/16f, paintBlack)
+        canvas.drawText("price : $price", 10*x/16f, 14*y/16f, paintBlack)
     }
 
-    @Synchronized private fun enemyDraw(canvas: Canvas) {
+    // Enemy 객체 관리
+    @Synchronized
+    private fun statusChanged(canvas: Canvas) {
+        if (time > 48) {
+            time = 1
+        } else {
+            if (time == 48) { // 초당 약 1회 동작
+                enemyList.add(Enemy(50f, 0f, 50)) // 적 객체 생성
+            }
+
+            if (time / 4 > 0 && time % 4 == 0) {
+                val dice = diceList[(time / 4) - 1]
+
+                if (dice.level > 0 && dice.isWait) { // 공격 대기 상태일 경우 공격 시작
+                    val r = random.nextInt(49) - 25
+                    dice.attackX = mid + r  // x 좌표 랜덤 설정
+                    dice.attackY = bot
+                    dice.isWait = false
+                }
+                else if (dice.attackY < 0) { // top 좌표를 넘어갈 경우
+                        dice.isWait = true
+                }
+            }
+        }
+
+        // diceList 의 dice 객체들을 모두 Draw
+        for (dice in diceList) {
+            if (dice.level > 0 && !dice.isWait) { // 공격 대기 상태가 아닌 경우에만 그리기
+                val s = dice.level * 10
+                canvas.drawRect(
+                    dice.attackX - s,
+                    dice.attackY - s,
+                    dice.attackX + s,
+                    dice.attackY + s,
+                    paintRed
+                )
+
+                dice.attackY -= 40
+            }
+        }
+
         // enemyList 의 enemy 객체들을 모두 Draw
         for (enemy in enemyList) {
             val size = enemy.size
@@ -89,6 +128,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             canvas.drawText(enemy.hp.toString(), mid, enemy.y + 20, paintWhite) // enemy 객체의 hp 출력
         }
 
+        // enemyList 의 enemy 객체들의 상태 변경
         val iterator = enemyList.iterator()
         while (iterator.hasNext()) {
             val e = iterator.next()
@@ -97,19 +137,53 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 gold += 10 // 적 처치 시 골드 획득
                 score += 10 // 적 처치 시 점수 증가
             }
-            else if (e.y > bot) { // bottom 좌표를 초과할 경우
+            else if (e.y > bot) { // bottom 좌표를 넘어갈 경우
                 iterator.remove()
                 playerHp -= 10 // 적 처치 실패 시 hp 감소
             }
             else { // 삭제 조건이 아닐 경우 객체 이동
                 e.y += 5 // y좌표 아래로 이동
 
-                // hp 감소시 삭제 test
-                if (random.nextInt(150)== 50) {
-                    e.hp -= 100
+                for (dice in diceList) {
+                    if (e.y-10 > dice.attackY) {
+                        dice.attackY = bot
+                        dice.isWait = true
+                        e.hp -= 10
+                    }
                 }
             }
         }
+
+        time += 1
+    } // statusChanged(canvas: Canvas)
+
+    fun buyDice() {
+        if (gold >= price && !isFull()) {
+            gold -= price
+            price += 10
+            addRandom()
+        }
+    }
+
+    private fun addRandom() {
+        if (!isFull()) {
+            while (true) {
+                val r = random.nextInt(11)
+                if (diceList[r].level == 0) {
+                    diceList[r].level = 1
+                }
+                return
+            }
+        }
+    }
+
+    private fun isFull() : Boolean { // 빈 공간이 있는지 확인
+        for (dice in diceList) {
+            if (dice.level == 0) {
+                return false
+            }
+        }
+        return true
     }
 
     fun getScore() : Int {
