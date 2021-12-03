@@ -77,11 +77,9 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         canvas.drawText("score : $score", x/16f, y/16f, paintBlack)
         canvas.drawText("HP : $playerHp", x/16f, 15*y/16f, paintBlack)
         canvas.drawText("gold : $gold", 10*x/16f, 15*y/16f, paintBlack)
-        canvas.drawText("price : $price", 10*x/16f, 14*y/16f, paintBlack)
     }
 
-    // Enemy 객체 관리
-    @Synchronized
+    // Dice, Enemy 객체 관리
     private fun statusChanged(canvas: Canvas) {
         if (time > 48) {
             time = 1
@@ -148,7 +146,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                     if (e.y-10 > dice.attackY) {
                         dice.attackY = bot
                         dice.isWait = true
-                        e.hp -= 10
+                        e.hp -= dice.level * 10
                     }
                 }
             }
@@ -187,8 +185,24 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         return true
     }
 
+    fun levelUp(first : Int, second : Int) {
+        if (diceList[first].level != 0
+            && diceList[second].level != 0
+            && diceList[first].level == diceList[second].level
+            && diceList[first].type == diceList[second].type
+        ) {
+            diceList[second].level += 1
+            diceList[first].level = 0
+            gameActivity.drawDice()
+        }
+    }
+
     fun getScore() : Int {
         return score // GameActivity 에서 score 사용
+    }
+
+    fun getPrice() : Int {
+        return price
     }
 
     fun getDiceList() : ArrayList<Dice> {
