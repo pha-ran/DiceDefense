@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.btnRank.setOnClickListener {
-
+            startActivity(Intent(this, ScoreActivity::class.java))
         }
 
         binding.btnTip.setOnClickListener {

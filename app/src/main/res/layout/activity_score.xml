@@ -6,13 +6,114 @@
     android:layout_height="match_parent"
     tools:context=".Main.ScoreActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" >
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Ranking"
+            android:textColor="@android:color/holo_purple"
+            android:textStyle="bold"
+            android:textSize="36sp"
+            android:layout_margin="16dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp" >
+
+            <ImageView
+                android:id="@+id/iv_rank1"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/rank_1" />
+
+            <TextView
+                android:id="@+id/tv_rank1"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_score"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp" >
+
+            <ImageView
+                android:id="@+id/iv_rank2"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/rank_2" />
+
+            <TextView
+                android:id="@+id/tv_rank2"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_score"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp" >
+
+            <ImageView
+                android:id="@+id/iv_rank3"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/rank_3" />
+
+            <TextView
+                android:id="@+id/tv_rank3"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:background="@drawable/bg_score"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="TextView"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="메인으로"
+            android:textStyle="bold"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
