@@ -25,7 +25,7 @@ class GameActivity : AppCompatActivity() {
 
         adaptor.setOnItemClickListener(object : FieldAdaptor.OnItemClickListener{
             override fun onItemClick(position: Int) {
-                selectDice(position)
+                selectDice(position) // 필드 선택 이벤트
             }
         })
         
@@ -55,7 +55,7 @@ class GameActivity : AppCompatActivity() {
                 showSelected(true)
             }
             selected != position -> {
-                binding.gameView.levelUp(selected, position)
+                binding.gameView.levelUp(selected, position) // 주사위 레벨업 함수 실행
                 selected = -1
                 showSelected(false)
             }

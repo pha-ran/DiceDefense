@@ -32,6 +32,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var gold = 50
     private var price = 10
     private var time = 0
+    private var round = 0
+    private var remain = 250 // 초기 대기 시간
 
     // Initialize
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -75,19 +77,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
         // 현재 상태 그리기
         canvas.drawText("score : $score", x/16f, y/16f, paintBlack)
+        canvas.drawText("round : $round", 11*x/16f, y/16f, paintBlack)
         canvas.drawText("HP : $playerHp", x/16f, 15*y/16f, paintBlack)
-        canvas.drawText("gold : $gold", 10*x/16f, 15*y/16f, paintBlack)
+        canvas.drawText("gold : $gold", 11*x/16f, 15*y/16f, paintBlack)
     }
 
     // Dice, Enemy 객체 관리
     private fun statusChanged(canvas: Canvas) {
         if (time > 48) {
             time = 1
-        } else {
-            if (time == 48) { // 초당 약 1회 동작
-                enemyList.add(Enemy(50f, 0f, 30)) // 적 객체 생성
-            }
-
+        }
+        else {
             if (time / 4 > 0 && time % 4 == 0) {
                 val dice = diceList[(time / 4) - 1]
 
@@ -100,6 +100,18 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 else if (dice.attackY < 0) { // top 좌표를 넘어갈 경우
                         dice.isWait = true
                 }
+            }
+        }
+
+        if (remain <= 1) {
+            remain = 650
+            round += 1
+        }
+        else {
+            if (remain <= 500
+                && remain % 50 == 0
+                && round > 0) { // 초당 약 1회 동작
+                enemyList.add(Enemy(round * 3 + 30f, 0f, round * 10)) // 적 객체 생성
             }
         }
 
@@ -133,17 +145,17 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             if (e.hp <= 0) { // hp가 0이 이하가 될 경우
                 iterator.remove()
                 gold += 10 // 적 처치 시 골드 획득
-                score += 10 // 적 처치 시 점수 증가
+                score += round * 10 // 적 처치 시 점수 증가
             }
             else if (e.y > bot) { // bottom 좌표를 넘어갈 경우
                 iterator.remove()
-                playerHp -= 10 // 적 처치 실패 시 hp 감소
+                playerHp -= e.hp // 적 처치 실패 시 hp 감소
             }
             else { // 삭제 조건이 아닐 경우 객체 이동
                 e.y += 5 // y좌표 아래로 이동
 
                 for (dice in diceList) {
-                    if (e.y-10 > dice.attackY) {
+                    if (e.y-10 > dice.attackY) { // 충돌 처리
                         dice.attackY = bot
                         dice.isWait = true
                         e.hp -= dice.level * 10
@@ -153,6 +165,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         }
 
         time += 1
+        remain -= 1
     } // statusChanged(canvas: Canvas)
 
     fun buyDice() {
@@ -188,6 +201,8 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     fun levelUp(first : Int, second : Int) {
         if (diceList[first].level != 0
             && diceList[second].level != 0
+            && diceList[first].level <= 6
+            && diceList[second].level <= 6
             && diceList[first].level == diceList[second].level
             && diceList[first].type == diceList[second].type
         ) {

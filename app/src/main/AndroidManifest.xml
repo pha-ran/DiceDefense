@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DiceDefense">
         <activity
+            android:name=".Main.TipActivity"
+            android:exported="true" />
+        <activity
             android:name=".Main.ScoreActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
@@ -20,7 +23,7 @@
         <activity
             android:name=".Main.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

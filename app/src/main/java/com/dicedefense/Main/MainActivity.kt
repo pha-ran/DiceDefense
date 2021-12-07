@@ -14,6 +14,25 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startActivity(Intent(this, GameActivity::class.java))
+        binding.btnGameStart.setOnClickListener {
+            startActivity(Intent(this, GameActivity::class.java))
+        }
+
+        binding.btnRank.setOnClickListener {
+
+        }
+
+        binding.btnTip.setOnClickListener {
+            startActivity(Intent(this, TipActivity::class.java))
+        }
+
+        binding.btnExit.setOnClickListener {
+            finish()
+        }
+    }
+
+    // 뒤로가기 키 방지
+    override fun onBackPressed() {
+        //super.onBackPressed()
     }
 }
