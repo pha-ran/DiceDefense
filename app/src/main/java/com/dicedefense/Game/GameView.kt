@@ -33,7 +33,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     private var price = 10
     private var time = 0
     private var round = 0
-    private var remain = 250 // 초기 대기 시간
+    private var remain = 250 // 현재 라운드의 남은 시간, 250 = 초기 대기 시간 5초
 
     // Initialize
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -84,10 +84,12 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
     // Dice, Enemy 객체 관리
     private fun statusChanged(canvas: Canvas) {
+        // 주사위 공격 관리 (초당 1회 공격)
         if (time > 48) {
             time = 1
         }
         else {
+            // time 이 4, 8, 12... 가 될 때마다 [0], [1], [2]... 공격
             if (time / 4 > 0 && time % 4 == 0) {
                 val dice = diceList[(time / 4) - 1]
 
@@ -103,6 +105,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             }
         }
 
+        // 라운드 관리 (대기시간 3초, 10초당 1라운드)
         if (remain <= 1) {
             remain = 650
             round += 1
@@ -118,16 +121,20 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         // diceList 의 dice 객체들을 모두 Draw
         for (dice in diceList) {
             if (dice.level > 0 && !dice.isWait) { // 공격 대기 상태가 아닌 경우에만 그리기
-                val s = dice.level * 10
-                canvas.drawRect(
-                    dice.attackX - s,
-                    dice.attackY - s,
-                    dice.attackX + s,
-                    dice.attackY + s,
-                    paintRed
-                )
+                val s = dice.level * 10 // 공격 크기 설정
+                when (dice.type) { // 타입 별 공격 색상 설정
+                    0 -> { // normal
+                        canvas.drawRect(dice.attackX - s, dice.attackY - s, dice.attackX + s, dice.attackY + s, paintBlack)
+                    }
+                    1 -> { // red
+                        canvas.drawRect(dice.attackX - s, dice.attackY - s, dice.attackX + s, dice.attackY + s, paintRed)
+                    }
+                    2 -> { // blue
+                        canvas.drawRect(dice.attackX - s, dice.attackY - s, dice.attackX + s, dice.attackY + s, paintBlue)
+                    }
+                }
 
-                dice.attackY -= 5
+                dice.attackY -= 10 // 공격 이동
             }
         }
 
@@ -142,23 +149,25 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         val iterator = enemyList.iterator()
         while (iterator.hasNext()) {
             val e = iterator.next()
-            if (e.hp <= 0) { // hp가 0이 이하가 될 경우
-                iterator.remove()
-                gold += 10 // 적 처치 시 골드 획득
-                score += round * 10 // 적 처치 시 점수 증가
-            }
-            else if (e.y > bot) { // bottom 좌표를 넘어갈 경우
-                iterator.remove()
-                playerHp -= e.hp // 적 처치 실패 시 hp 감소
-            }
-            else { // 삭제 조건이 아닐 경우 객체 이동
-                e.y += 5 // y좌표 아래로 이동
+            when {
+                e.hp <= 0 -> { // hp가 0이 이하가 될 경우
+                    iterator.remove()
+                    gold += 10 // 적 처치 시 골드 획득
+                    score += round * 10 // 적 처치 시 점수 증가
+                }
+                e.y > bot -> { // bottom 좌표를 넘어갈 경우
+                    iterator.remove()
+                    playerHp -= e.hp // 적 처치 실패 시 적의 남은 체력만큼 hp 감소
+                }
+                else -> { // 삭제 조건이 아닐 경우 객체 이동
+                    e.y += 5 // y좌표 아래로 이동
 
-                for (dice in diceList) {
-                    if (e.y-10 > dice.attackY) { // 충돌 처리
-                        dice.attackY = bot
-                        dice.isWait = true
-                        e.hp -= dice.level * 10
+                    for (dice in diceList) {
+                        if (e.y - 10 > dice.attackY) { // 충돌 처리
+                            dice.attackY = bot
+                            dice.isWait = true
+                            e.hp -= dice.level * 10 + dice.type * 5
+                        }
                     }
                 }
             }
@@ -182,6 +191,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                 val r = random.nextInt(12)
                 if (diceList[r].level == 0) {
                     diceList[r].level = 1
+                    diceList[r].type = random.nextInt(3)
                     gameActivity.drawDice()
                     break
                 }
@@ -207,6 +217,7 @@ class GameView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
             && diceList[first].type == diceList[second].type
         ) {
             diceList[second].level += 1
+            diceList[second].type = random.nextInt(3)
             diceList[first].level = 0
             gameActivity.drawDice()
         }

@@ -22,22 +22,82 @@ class FieldAdaptor(private val diceList : ArrayList<Dice>) : RecyclerView.Adapte
         fun bind(dice : Dice, position: Int) {
             when (dice.level) {
                 1 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_1)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_1)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_1)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_1)
+                        }
+                    }
                 }
                 2 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_2)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_2)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_2)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_2)
+                        }
+                    }
                 }
                 3 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_3)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_3)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_3)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_3)
+                        }
+                    }
                 }
                 4 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_4)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_4)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_4)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_4)
+                        }
+                    }
                 }
                 5 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_5)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_5)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_5)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_5)
+                        }
+                    }
                 }
                 6 -> {
-                    binding.IvField.setImageResource(R.drawable.dice_normal_6)
+                    when (dice.type) {
+                        0 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_normal_6)
+                        }
+                        1 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_red_6)
+                        }
+                        2 -> {
+                            binding.IvField.setImageResource(R.drawable.dice_blue_6)
+                        }
+                    }
                 }
                 else -> {
                     binding.IvField.setImageResource(R.drawable.dice_empty)

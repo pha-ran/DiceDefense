@@ -21,6 +21,7 @@ class ScoreActivity : AppCompatActivity() {
         sp = applicationContext.getSharedPreferences("score", MODE_PRIVATE)
         getRank()
 
+        // 게임 종료 후 실행시 획득한 점수 반영
         val score = intent.extras?.get("score")
         if (score != null) {
             val s = score.toString().toInt()
@@ -40,19 +41,10 @@ class ScoreActivity : AppCompatActivity() {
 
     private fun getRank() {
         // 점수 불러오기
-        val f = sp.getInt("first", -1)
-        val s = sp.getInt("second", -1)
-        val t = sp.getInt("third", -1)
+        first = sp.getInt("first", 0)
+        second = sp.getInt("second", 0)
+        third = sp.getInt("third", 0)
 
-        if (f != -1) {
-            first = f
-        }
-        if (s != -1) {
-            second = s
-        }
-        if (t != -1) {
-            third = t
-        }
         binding.tvRank1.text = first.toString()
         binding.tvRank2.text = second.toString()
         binding.tvRank3.text = third.toString()
@@ -60,13 +52,13 @@ class ScoreActivity : AppCompatActivity() {
 
     private fun setRank(s : Int) {
         when {
-            s > first -> { // 1위 달성시 전 1위와 2위가 한 등수 내려감
+            s > first -> { // 1위 달성시 전 1위와 2위 등수 하락
                 sp.edit().putInt("first", s).apply()
                 sp.edit().putInt("second", first).apply()
                 sp.edit().putInt("third", second).apply()
                 showToast("1위 달성! 점수가 갱신되었습니다.")
             }
-            s > second -> { // 2위 달성시 전 2위가 한 등수 내려감
+            s > second -> { // 2위 달성시 전 2위 등수 하락
                 sp.edit().putInt("second", s).apply()
                 sp.edit().putInt("third", second).apply()
                 showToast("2위 달성! 점수가 갱신되었습니다.")
